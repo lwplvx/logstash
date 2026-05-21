@@ -55,7 +55,7 @@ def get_env():
         print("Error: SNYK_TOKEN environment variable is required", file=sys.stderr)
         sys.exit(1)
 
-    dry_run = os.environ.get("DRY_RUN", "false").lower() == "true"
+    dry_run = os.environ.get("DRY_RUN", "true").lower() == "true"
 
     return token, dry_run
 
@@ -73,6 +73,17 @@ def create_session(token: str) -> requests.Session:
 
 def fetch_active_versions() -> set:
     """Fetch current active versions from logstash-versions.yml."""
+
+    #HACK: hardcoded versions for local testing
+    versions = {
+        "9.3.4",
+        "9.4.1",
+        "8.19.16-SNAPSHOT",
+        "9.3.5-SNAPSHOT",
+        "9.4.2-SNAPSHOT",
+        "9.5.0-SNAPSHOT",
+    }
+    return versions
 
     try:
         resp = requests.get(VERSIONS_URL, timeout=30)
